@@ -1,6 +1,6 @@
 import 'babel-polyfill';
 import React from "react";
-import {BrowserRouter, Route, NavLink, Switch, Redirect, withRouter} from 'react-router-dom';
+import {BrowserRouter, Route, NavLink} from 'react-router-dom';
 import AboutTheComplex from './AboutTheComplex.jsx';
 import Features from './Features.jsx';
 import Penthouses from './Penthouses.jsx';
@@ -9,19 +9,20 @@ import ChooseAFlat from './ChooseAFlat.jsx';
 export default class App extends React.Component{
     constructor(props) {
         super(props);
-        this.state = {
-            menu : [
-                {text: 'О комплексе', link: '/aboutthecomplex'},
-                {text: 'Особенности', link: '/features'},
-                {text: 'Пентхаусы', link: '/penthouses'},
-                {text: 'Выбрать квартиру', link: '/chooseaflat'}
-            ]
-        }
-
         this.activeItemLineRef = React.createRef();
+
+        this.changeURL();
+    }
+
+    changeURL = () => {
+        const location = window.location.href.split('/');
+        if (location[location.length -1] == '') {
+            window.history.pushState(null, null, '/aboutthecomplex');
+        }
     }
 
     componentDidMount() {
+        this.defaultLinePosition();
         window.addEventListener('popstate', this.defaultLinePosition)
     }
 
@@ -71,31 +72,6 @@ export default class App extends React.Component{
         menuLinks[num].append(activeItemLine);
     }
 
-    getLinks = () => {
-        const {menu} = this.state;
-        const activeLine = (<div className="menu__active-line"
-                                style={ {left: '0px'} }
-                                ref={this.activeItemLineRef}
-                                data-itemnum="0">
-                            </div>);
-
-        return <ul className="menu__list" onMouseOut={this.menuItemMouseOute}>
-            {menu.map((item, i) => {
-                return (
-                    <li className="menu__list__item" key={i}>
-                        <NavLink to={`${item.link}`}
-                                onMouseOver={ this.menuItemMouseOver(i) }
-                                onClick={ this.changeLinePosition(i) }
-                                data-num={`${i}`}>
-                            {item.text}
-                            {i == 0 ? activeLine : null}
-                        </NavLink>
-                    </li>
-                )
-            })}
-        </ul>
-    }
-
     render() {
         return(
         <BrowserRouter> 
@@ -106,7 +82,45 @@ export default class App extends React.Component{
                         <span className="logo__text">Первомайская</span>
                     </div>
                     <nav className='menu'>
-                        {this.getLinks()}
+                        <ul className="menu__list" onMouseOut={this.menuItemMouseOute}>
+                            <li className="menu__list__item">
+                                <NavLink to="/aboutthecomplex"
+                                        onMouseOver={ this.menuItemMouseOver(0) }
+                                        onClick={ this.changeLinePosition(0) }
+                                        data-num='0'>
+                                    О комплексе
+                                    <div className="menu__active-line"
+                                        style={ {left: '0px'} }
+                                        ref={this.activeItemLineRef}
+                                        data-itemnum="0">
+                                    </div>
+                                </NavLink>
+                            </li>
+                            <li className="menu__list__item">
+                                <NavLink to="/features" 
+                                        onMouseOver={ this.menuItemMouseOver(1) }
+                                        onClick={ this.changeLinePosition(1) }
+                                        data-num='1'>
+                                    Особенности
+                                </NavLink>
+                            </li>
+                            <li className="menu__list__item">
+                                <NavLink to="/penthouses"
+                                        onMouseOver={ this.menuItemMouseOver(2) }
+                                        onClick={ this.changeLinePosition(2) }
+                                        data-num='2'>
+                                    Пентхаусы
+                                </NavLink>
+                            </li>
+                            <li className="menu__list__item">
+                                <NavLink to="/chooseaflat"
+                                        onMouseOver = { this.menuItemMouseOver(3) }
+                                        onClick = { this.changeLinePosition(3) }
+                                        data-num='3'>
+                                    Выбрать квартиру
+                                </NavLink>
+                            </li>
+                        </ul>
                     </nav>
                     <div className="phone-number">
                         <div className="right-block"><div></div></div>
@@ -116,13 +130,10 @@ export default class App extends React.Component{
                     </div>
                 </header>
                 <main>
-                <Switch>
                     <Route path="/aboutthecomplex" component={AboutTheComplex}/>
                     <Route path="/features" component={Features}/>
                     <Route path="/penthouses" component={Penthouses}/>
                     <Route path="/chooseaflat" component={ChooseAFlat}/>
-                    <Redirect from='/' to="/aboutthecomplex" />
-                </Switch>                  
                 </main>
                 <footer>
                 Разработано в MST
