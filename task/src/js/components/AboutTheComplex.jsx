@@ -20,7 +20,7 @@ class AboutTheComplex extends React.Component{
                             «Первомайская» формирует современный стиль 
                             жизни [тексттекстекстексттексттекстекстексттекстте
                             кстекстексттексттекстекстекст]`,
-                    img: __dirname + "dist/img/аrchitecture.jpg"
+                    img: '/dist/img/аrchitecture.jpg'
                 },
                 2 : {name: null, text: null, img: null
                 },
@@ -30,7 +30,7 @@ class AboutTheComplex extends React.Component{
                             территория для детей, игр на свежем воздухе и 
                             вечерних [тексттекстекстексттексттекстекстексттекстте
                                 кстекстексттексттекстекстекст]`,
-                    img: __dirname + 'dist/img/security.jpg'
+                    img: '/dist/img/security.jpg'
                 },
                 4 : {
                     name: null, text: null, img: null
